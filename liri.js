@@ -1,18 +1,14 @@
-// require("dotenv").config();
-
-// var keys = require("./keys.js");
-
-// var spotify = new Spotify(keys.spotify);
-
-const axios = require("axios");
+require("dotenv").config();
 
 const fs = require("fs");
-
+const axios = require("axios");
 const moment = require('moment');
+const keys = require("./keys.js");
+const Spotify = require("node-spotify-api");
 
 let command = process.argv[2];
-
 let input = process.argv.slice(3).join(" ");
+
 
 switch (command) {
   case "concert-this":
@@ -28,6 +24,7 @@ switch (command) {
       console.log("Please type concert-this followed by your query");
       break;
 }
+
 
 function searchArtist(artist) {
   if (!artist) {
@@ -54,6 +51,22 @@ function searchArtist(artist) {
       console.log("Error", error.message);
     }
     console.log(error.config);
+  });
+}
+
+
+function searchSong(song) {
+  const spotify = new Spotify(keys.spotify);
+
+  spotify.search({ type: "track", query: song, limit: 1 }, function(err, data) {
+    if (err) { 
+      throw err;
+    } else {
+        for (let i = 0; i < data.tracks.items.length; i++) {
+          let songInfo = data.tracks.items[i];
+          console.log(`---------------------------------------\nArtist(s): ${songInfo.artists[0].name}\nSong Name: ${songInfo.name}\nPreview Link: ${songInfo.preview_url}\nAlbum: ${songInfo.album.name}`);
+      }
+    }
   });
 }
 
