@@ -8,6 +8,8 @@ const axios = require("axios");
 
 const fs = require("fs");
 
+const moment = require('moment');
+
 let command = process.argv[2];
 
 let input = process.argv.slice(3).join(" ");
@@ -28,10 +30,20 @@ switch (command) {
 }
 
 function searchArtist(artist) {
+  if (!artist) {
+    artist = "Coldplay";
+  }
+  
   let URL = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp"
   axios.get(URL).then(function (response) {
-      console.log(response.data)
-  }).catch(function(error) {
+
+    const data = response.data
+
+    for (let i = 0; i < data.length; i++) {
+      console.log(`---------------------------------------\nConcert Venue: ${data[i].venue.name}\nConcert Location: ${data[i].venue.city}, ${data[i].venue.country}\nConcert Date/Time: ${moment(data[i].datetime).format("MM/DD/YYYY")}`);
+    }
+  })
+  .catch(function(error) {
     if (error.response) {
       console.log(error.response.data);
       console.log(error.response.status);
