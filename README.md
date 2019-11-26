@@ -1,9 +1,9 @@
 # liri-node-app
 
-## Project Name
+## App Name
 LIRI
 
-## Project Overview
+## App Overview
 LIRI is a command line node application that takes in user input and gives back information about concerts, songs, and movies. The NPM package axios is used to send requests and retrieve data from the below APIs:
 * Bands in Town
 * Spotify
